@@ -1,9 +1,10 @@
 h1 ログイン
 
+
 = form_with scope: :session, local: true do |f|
   .form-group
     = f.label :email, "メールアドレス" 
-    / label横の:emailは下の:emailに対応している。bootstrapとかで扱いやすくするため？
+    / label横の:emailは下の:emailに対応している。railsがうまく認識するため？bootstrapとかで扱いやすくするため？
     = f.text_field :email, class: "form-control", id: "session_email"
   .form-group
     = f.label :password, "パスワード"

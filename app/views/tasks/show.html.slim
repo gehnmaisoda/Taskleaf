@@ -13,7 +13,7 @@ table.table.table-hover
       td= @task.name
     tr
       th タスクの詳細
-      td= simple_format(h(@task.description), {}, sanitize:false, wrapper_tag: "div")
+      td= auto_link(simple_format(h(@task.description), {}, sanitize:false, wrapper_tag: "div"))
     tr
       /th= Task.human_attribute_name(:created_at)
       th 作った日
