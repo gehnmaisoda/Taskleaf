@@ -1,6 +1,17 @@
 class TasksController < ApplicationController
   def index
-    @tasks = current_user.tasks
+    @q = current_user.tasks.ransack(params[:q])
+    @tasks = @q.result(distinct: true).page(params[:page])
+    
+    respond_to do |format|
+      format.html
+      format.csv { send_data @tasks.generate_csv, filename: "tasks-#{Time.zone.now.strftime("%Y%m%d$S")}.csv" }
+    end
+  end
+  
+  def import
+    current_user.tasks.import(params[:file])
+    redirect_to tasks_url, notice: "タスクを追加しました"
   end
 
   def show
@@ -15,6 +26,7 @@ class TasksController < ApplicationController
     @task = current_user.tasks.new(task_params)
     
     if @task.save
+      logger.debug "task: #{@task.attributes.inspect}"
       redirect_to @task, notice: "タスク「#{@task.name}」を登録しました"
     else
       render :new
@@ -40,6 +52,6 @@ class TasksController < ApplicationController
     private
     
     def task_params
-      params.require(:task).permit(:name, :description)
+      params.require(:task).permit(:name, :description, :image)
     end
 end

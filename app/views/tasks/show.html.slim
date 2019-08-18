@@ -14,6 +14,10 @@ table.table.table-hover
     tr
       th タスクの詳細
       td= auto_link(simple_format(h(@task.description), {}, sanitize:false, wrapper_tag: "div"))
+    - if @task.image.attached?
+      tr
+        th 画像
+        td= image_tag @task.image
     tr
       /th= Task.human_attribute_name(:created_at)
       th 作った日
